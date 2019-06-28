@@ -1,5 +1,4 @@
-webpack-conf-cli
-================
+# webpack-conf-cli
 
 webpack config generate cli
 
@@ -9,11 +8,15 @@ webpack config generate cli
 [![License](https://img.shields.io/npm/l/webpack-conf-cli.svg)](https://github.com/https://github.com/wzhkobe2408/repo/https://github.com/owner/webpack-conf-cli/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+- [Usage](#usage)
+- [Commands](#commands)
+  <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g webpack-conf-cli
 $ wpconf COMMAND
@@ -25,11 +28,16 @@ USAGE
   $ wpconf COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`wpconf hello [FILE]`](#wpconf-hello-file)
-* [`wpconf help [COMMAND]`](#wpconf-help-command)
+
+- [`wpconf init [FILENAME]`](#wpconf-init-command)
+- [`wpconf ts-loader [FILENAME]`](#wpconf-ts-loader-command)
+- [`wpconf help [COMMAND]`](#wpconf-help-command)
 
 ## `wpconf init [FILENAME] -m`
 
@@ -49,6 +57,21 @@ EXAMPLE
 
 _See code: [src/commands/init.ts](https://github.com/wzhkobe2408/repo/https://github.com/owner/webpack-conf-cli/blob/v0.0.1/src/commands/init.ts)_
 
+## `wpconf ts-loader [FILENAME]`
+
+add ts-loader to webpack config
+
+```
+USAGE
+  $ wpconf ts-config webpack.config.js
+
+EXAMPLE
+  $ wpconf ts-config webpack.config.js
+  add ts-loader to webpack -> module -> rules
+```
+
+_See code: [src/commands/init.ts](https://github.com/wzhkobe2408/repo/https://github.com/owner/webpack-conf-cli/blob/v0.0.1/src/commands/ts-loader.ts)_
+
 ## `wpconf help [COMMAND]`
 
 display help for wpconf
@@ -65,4 +88,5 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.0/src/commands/help.ts)_
+
 <!-- commandsstop -->
