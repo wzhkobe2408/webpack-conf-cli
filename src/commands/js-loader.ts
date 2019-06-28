@@ -1,6 +1,5 @@
 import { Command, flags } from '@oclif/command';
 import { stringify } from 'javascript-stringify';
-import * as Config from 'webpack-chain';
 import * as merge from 'webpack-merge';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -45,8 +44,6 @@ export default class JSLoader extends Command {
     }
 
     const currWebpackConfig = require(filename);
-
-    const config = new Config();
 
     const newWebpackConfig = merge(currWebpackConfig, {
       module: {
