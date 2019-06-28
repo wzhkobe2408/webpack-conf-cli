@@ -2,8 +2,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        index: {},
-        about: {}
+        index: [
+            './src/index.ts'
+        ],
+        about: [
+            './src/about.ts'
+        ]
     },
     output: {
         path: path.join(__dirname, 'dist'),
