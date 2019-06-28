@@ -31,25 +31,23 @@ USAGE
 * [`wpconf hello [FILE]`](#wpconf-hello-file)
 * [`wpconf help [COMMAND]`](#wpconf-help-command)
 
-## `wpconf hello [FILE]`
+## `wpconf init [FILENAME] -m`
 
-describe the command here
+generate init webpack config file
 
 ```
 USAGE
-  $ wpconf hello [FILE]
+  $ wpconf init webpack.config.js
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -m, --multi
 
 EXAMPLE
-  $ wpconf hello
-  hello world from ./src/hello.ts!
+  $ wpconf init webpack.config.js -m
+  webpack.config.js multi entry config file is generated in workding dir
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/wzhkobe2408/repo/https://github.com/owner/webpack-conf-cli/blob/v0.0.1/src/commands/hello.ts)_
+_See code: [src/commands/init.ts](https://github.com/wzhkobe2408/repo/https://github.com/owner/webpack-conf-cli/blob/v0.0.1/src/commands/init.ts)_
 
 ## `wpconf help [COMMAND]`
 
