@@ -1,12 +1,31 @@
-const path = require('path');
-
 module.exports = {
-    entry: {
-        index: {},
-        about: {}
-    },
-    output: {
-        path: path.join(__dirname, 'dist'),
-        filename: '[name].[hash:8].js'
-    }
+  output: {
+    path: '/Users/wangzhonghuan/Desktop/webpack-conf-cli/dist',
+    filename: '[name].[hash:8].js'
+  },
+  module: {
+    rules: [
+      /* config.module.rule('compile') */
+      {
+        test: /\.js?$/,
+        exclude: [
+          'node_modules'
+        ],
+        use: [
+          /* config.module.rule('compile').use('babel') */
+          {
+            loader: 'babel-loader'
+          }
+        ]
+      }
+    ]
+  },
+  entry: {
+    index: [
+      {}
+    ],
+    about: [
+      {}
+    ]
+  }
 }

@@ -56,23 +56,19 @@ export default class JSLoader extends Command {
 
     config.module
       .rule('compile')
-      .test(new RegExp(/\.js?$/).source)
+      .test(/\.js?$/)
       .exclude.add('node_modules')
       .end()
       .use('babel')
       .loader('babel-loader');
 
-    const newWebpackConfig = merge(currWebpackConfig, config.toConfig());
+    config.merge(currWebpackConfig);
 
-    fs.writeFile(
-      filename,
-      `module.exports = ${JSON.stringify(newWebpackConfig, null, 2)}`,
-      err => {
-        if (err) {
-          return this.error(`Error happened when change config`);
-        }
-        this.log(`Successfully add js loader`);
-      },
-    );
+    fs.writeFile(filename, `module.exports = ${config.toString()}`, err => {
+      if (err) {
+        return this.error(`Error happened when change config`);
+      }
+      this.log(`Successfully add js loader`);
+    });
   }
 }
