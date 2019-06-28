@@ -1,31 +1,33 @@
 module.exports = {
+  entry: {
+    index: [
+      './src/index.ts'
+    ]
+  },
   output: {
-    path: '/Users/wangzhonghuan/Desktop/webpack-conf-cli/dist',
-    filename: '[name].[hash:8].js'
+    filename: '[name].[hash:8].js',
+    path: '/Users/wangzhonghuan/Desktop/webpack-conf-cli/dist'
   },
   module: {
     rules: [
-      /* config.module.rule('compile') */
       {
         test: /\.js?$/,
-        exclude: [
-          'node_modules'
-        ],
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.(tsx|ts)?$/,
         use: [
-          /* config.module.rule('compile').use('babel') */
           {
             loader: 'babel-loader'
+          },
+          {
+            loader: 'ts-loader'
           }
         ]
       }
-    ]
-  },
-  entry: {
-    index: [
-      {}
-    ],
-    about: [
-      {}
     ]
   }
 }

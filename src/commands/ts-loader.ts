@@ -6,10 +6,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { validateFileName } from '../utils';
 
-export default class JSLoader extends Command {
-  static description = 'Config js file loader';
+export default class TSLoader extends Command {
+  static description = 'Config ts(x) file loader';
 
-  static examples = [`$ wpconf js-loader`];
+  static examples = [`$ wpconf ts-loader`];
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -29,7 +29,7 @@ export default class JSLoader extends Command {
    */
   async run() {
     // 解析参数
-    const { args, flags } = this.parse(JSLoader);
+    const { args, flags } = this.parse(TSLoader);
     const filename = path.join(
       process.cwd(),
       args.filename || 'webpack.config.js',
@@ -52,11 +52,15 @@ export default class JSLoader extends Command {
       module: {
         rules: [
           {
-            test: /\.js?$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-            },
+            test: /\.(tsx|ts)?$/,
+            use: [
+              {
+                loader: 'babel-loader',
+              },
+              {
+                loader: 'ts-loader',
+              },
+            ],
           },
         ],
       },

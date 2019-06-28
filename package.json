@@ -12,6 +12,7 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
     "@types/webpack-merge": "^4.1.5",
+    "javascript-stringify": "^2.0.0",
     "tslib": "^1",
     "webpack-merge": "^4.2.1"
   },
