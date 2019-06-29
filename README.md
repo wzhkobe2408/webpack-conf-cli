@@ -21,7 +21,7 @@ $ npm install -g webpack-conf-cli
 $ wpconf COMMAND
 running command...
 $ wpconf (-v|--version|version)
-webpack-conf-cli/1.0.7 darwin-x64 node-v10.13.0
+webpack-conf-cli/1.0.8 darwin-x64 node-v10.13.0
 $ wpconf --help [COMMAND]
 USAGE
   $ wpconf COMMAND
@@ -35,6 +35,7 @@ USAGE
 * [`wpconf help [COMMAND]`](#wpconf-help-command)
 * [`wpconf init [FILENAME]`](#wpconf-init-filename)
 * [`wpconf js-loader [FILENAME]`](#wpconf-js-loader-filename)
+* [`wpconf less-loader [FILENAME]`](#wpconf-less-loader-filename)
 * [`wpconf ts-loader [FILENAME]`](#wpconf-ts-loader-filename)
 
 ## `wpconf help [COMMAND]`
@@ -70,7 +71,7 @@ EXAMPLE
   $ wpconf init --multi
 ```
 
-_See code: [src/commands/init.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.7/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.8/src/commands/init.ts)_
 
 ## `wpconf js-loader [FILENAME]`
 
@@ -87,7 +88,24 @@ EXAMPLE
   $ wpconf js-loader
 ```
 
-_See code: [src/commands/js-loader.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.7/src/commands/js-loader.ts)_
+_See code: [src/commands/js-loader.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.8/src/commands/js-loader.ts)_
+
+## `wpconf less-loader [FILENAME]`
+
+Config less file loader
+
+```
+USAGE
+  $ wpconf less-loader [FILENAME]
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ wpconf less-loader
+```
+
+_See code: [src/commands/less-loader.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.8/src/commands/less-loader.ts)_
 
 ## `wpconf ts-loader [FILENAME]`
 
@@ -104,5 +122,5 @@ EXAMPLE
   $ wpconf ts-loader
 ```
 
-_See code: [src/commands/ts-loader.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.7/src/commands/ts-loader.ts)_
+_See code: [src/commands/ts-loader.ts](https://github.com/wzhkobe2408/webpack-conf-cli/blob/v1.0.8/src/commands/ts-loader.ts)_
 <!-- commandsstop -->

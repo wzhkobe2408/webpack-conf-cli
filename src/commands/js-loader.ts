@@ -59,15 +59,17 @@ export default class JSLoader extends Command {
       },
     });
 
-    fs.writeFile(
-      filename,
-      `module.exports = ${stringify(newWebpackConfig, null, 2, {})}`,
-      err => {
-        if (err) {
-          return this.error(`Error happened when change config`);
-        }
-        this.log(`Successfully add js loader`);
-      },
-    );
+    const wholeStrForFile = fs.readFileSync(filename).toString();
+
+    const strForNewFile =
+      wholeStrForFile.split(/module\.exports\s*=\s*/)[0] +
+      `module.exports = ${stringify(newWebpackConfig, null, 2, {})}`;
+
+    fs.writeFile(filename, strForNewFile, err => {
+      if (err) {
+        return this.error(`Error happened when change config`);
+      }
+      this.log(`Successfully add js loader`);
+    });
   }
 }

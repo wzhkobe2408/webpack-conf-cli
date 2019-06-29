@@ -5,10 +5,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { validateFileName } from '../utils';
 
-export default class TSLoader extends Command {
-  static description = 'Config ts(x) file loader';
+export default class LessLoader extends Command {
+  static description = 'Config less file loader';
 
-  static examples = [`$ wpconf ts-loader`];
+  static examples = [`$ wpconf less-loader`];
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -28,7 +28,7 @@ export default class TSLoader extends Command {
    */
   async run() {
     // 解析参数
-    const { args, flags } = this.parse(TSLoader);
+    const { args, flags } = this.parse(LessLoader);
     const filename = path.join(
       process.cwd(),
       args.filename || 'webpack.config.js',
@@ -49,13 +49,20 @@ export default class TSLoader extends Command {
       module: {
         rules: [
           {
-            test: /\.(tsx|ts)?$/,
+            test: /\.(css|less)$/,
             use: [
               {
-                loader: 'babel-loader',
+                loader: 'css-loader',
               },
               {
-                loader: 'ts-loader',
+                loader: 'postcss-loader',
+              },
+              {
+                loader: 'less-loader',
+                options: {
+                  javascriptEnabled: true,
+                  strictMath: true,
+                },
               },
             ],
           },
@@ -73,7 +80,7 @@ export default class TSLoader extends Command {
       if (err) {
         return this.error(`Error happened when change config`);
       }
-      this.log(`Successfully add js loader`);
+      this.log(`Successfully add less loader`);
     });
   }
 }
