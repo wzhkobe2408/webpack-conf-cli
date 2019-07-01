@@ -5,10 +5,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { validateFileName } from '../utils';
 
-export default class JSLoader extends Command {
-  static description = 'Config js file loader';
+export default class ImageLoader extends Command {
+  static description = 'Config image loader';
 
-  static examples = [`$ wpconf js-loader`];
+  static examples = [`$ wpconf image-loader`];
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -28,7 +28,7 @@ export default class JSLoader extends Command {
    */
   async run() {
     // 解析参数
-    const { args, flags } = this.parse(JSLoader);
+    const { args, flags } = this.parse(ImageLoader);
     const filename = path.join(
       process.cwd(),
       args.filename || 'webpack.config.js',
@@ -48,13 +48,17 @@ export default class JSLoader extends Command {
     const newWebpackConfig = merge(currWebpackConfig, {
       module: {
         rules: [
-          {
-            test: /\.js?$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-            },
-          },
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                  {
+                    loader: 'url-loader',
+                    options: {
+                      limit: 8192,
+                    },
+                  },
+                ],
+            }
         ],
       },
     });
@@ -69,7 +73,7 @@ export default class JSLoader extends Command {
       if (err) {
         return this.error(`Error happened when change config`);
       }
-      this.log(`Successfully add js loader`);
+      this.log(`Successfully add image loader`);
     });
   }
 }

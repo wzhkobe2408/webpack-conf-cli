@@ -1,7 +1,7 @@
 {
   "name": "webpack-conf-cli",
   "description": "webpack config generate cli",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "wangzhonghuan",
   "bin": {
     "wpconf": "./bin/run"

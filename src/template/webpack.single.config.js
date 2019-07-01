@@ -9,5 +9,14 @@ module.exports = {
     output: {
         filename: '[name].[hash:8].js',
         path: path.join(__dirname, 'dist')
-    }
+    },
+    mode: 'development',
+    devtool: 'none',
+    devServer: {},
+    module: {
+        rules: []
+    },
+    resolve: {},
+    optimization: {},
+    plugins: []
 }

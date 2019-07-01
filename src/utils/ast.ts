@@ -22,6 +22,25 @@ class WebpackConfigModifier {
     }
 }
 
+// `
+// entry: {
+//     index: [
+//         './src/index.ts',
+//     ]
+// },
+// output: {
+//     filename: '[name].[hash:8].js',
+//     path: path.join(__dirname, 'dist')
+// },
+// devServer: {},
+// module: {
+//     rules: []
+// },
+// resolve: {},
+// optimization: {},
+// plugins: []
+// `
+
 
 function processConfig(webpackConfigSourceCode: string) {
     const webpackConfigModifier = new WebpackConfigModifier();

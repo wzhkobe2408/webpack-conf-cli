@@ -35,8 +35,8 @@ export default class TSLoader extends Command {
     );
 
     if (
-      !validateFileName(filename) &&
-      fs.existsSync(path.join(process.cwd(), filename))
+      !validateFileName(filename) ||
+      !fs.existsSync(filename)
     ) {
       return this.error(
         `Invalid webpack config filename or file doesn't exist`,
@@ -73,7 +73,7 @@ export default class TSLoader extends Command {
       if (err) {
         return this.error(`Error happened when change config`);
       }
-      this.log(`Successfully add js loader`);
+      this.log(`Successfully add ts loader`);
     });
   }
 }
