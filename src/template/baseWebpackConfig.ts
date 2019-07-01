@@ -15,12 +15,17 @@ module.exports = {
     devtool: 'none',
     devServer: {},
     module: {
-        rules: []
+        rules: [
+            {
+                test: /\.js?$/,
+                loader: 'babel-loader',
+            }
+        ]
     },
     resolve: {},
     optimization: {},
     plugins: []
 };
-`
+`;
 
 export default baseWebpackConfigSourceCode;

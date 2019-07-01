@@ -13,7 +13,7 @@ module.exports = {
   devtool: 'none',
   devServer: {},
   module: {
-      rules: []
+    rules: []
   },
   resolve: {},
   optimization: {},
