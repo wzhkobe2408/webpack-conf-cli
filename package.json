@@ -12,6 +12,7 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
     "@types/fs-extra": "^8.0.0",
+    "@types/html-webpack-plugin": "^3.2.0",
     "escodegen": "^1.11.1",
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
