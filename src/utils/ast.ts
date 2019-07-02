@@ -1,59 +1,73 @@
-import * as esprima from 'esprima';
-import * as estraverse from 'estraverse';
-import * as escodegen from 'escodegen';
-import * as ESTree from 'estree';
+// import * as esprima from 'esprima';
+// import * as estraverse from 'estraverse';
+// import * as escodegen from 'escodegen';
+// import * as ESTree from 'estree';
+// import { namedTypes, builders } from 'ast-types';
+
+import * as babylon from 'babylon';
+import generate from 'babel-generator';
+import * as t from 'babel-types';
+import traverse from 'babel-traverse';
+
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-// import * as t from 'babel-types';
 
-// import { namedTypes, builders } from 'ast-types';
-
-const {
-  Identifier,
-  Literal,
-  Property,
-  ObjectExpression,
-  ArrayExpression,
-} = esprima.Syntax;
+// const {
+//   Identifier,
+//   Literal,
+//   Property,
+//   ObjectExpression,
+//   ArrayExpression,
+// } = esprima.Syntax;
 
 class WebpackConfigModifier {
-  modifyMode(node: ESTree.Node, parentNode: ESTree.Node | null, val: string) {
-    if (node.type === Identifier && node.name === 'mode') {
-      if (parentNode && parentNode.type === Property) {
-        parentNode.value.type === Literal && (parentNode.value.value = val);
-      }
-    }
-  }
+  // modifyMode(node: ESTree.Node, parentNode: ESTree.Node | null, val: string) {
+  //   if (node.type === Identifier && node.name === 'mode') {
+  //     if (parentNode && parentNode.type === Property) {
+  //       parentNode.value.type === Literal && (parentNode.value.value = val);
+  //     }
+  //   }
+  // }
 
-  modifyDevTool(
-    node: ESTree.Node,
-    parentNode: ESTree.Node | null,
-    val: string,
-  ) {
-    if (node.type === Identifier && node.name === 'devtool') {
-      if (parentNode && parentNode.type === Property) {
-        parentNode.value.type === Literal && (parentNode.value.value = val);
-      }
-    }
-  }
+  // modifyDevTool(
+  //   node: ESTree.Node,
+  //   parentNode: ESTree.Node | null,
+  //   val: string,
+  // ) {
+  //   if (node.type === Identifier && node.name === 'devtool') {
+  //     if (parentNode && parentNode.type === Property) {
+  //       parentNode.value.type === Literal && (parentNode.value.value = val);
+  //     }
+  //   }
+  // }
 
-  modifyModuleRules(node: ESTree.Node, parentNode: ESTree.Node | null) {
-    if (parentNode)
-      if (node.type === ObjectExpression) {
-        const targetNode = node.properties.find((property: ESTree.Property) => {
-          return (
-            property.key.type === Identifier && property.key.name === 'rules'
-          );
-        });
+  // modifyModuleRules(node: ESTree.Node, parentNode: ESTree.Node | null) {
+  //   if (parentNode)
+  //     if (node.type === ObjectExpression) {
+  //       const targetNode = node.properties.find((property: ESTree.Property) => {
+  //         return (
+  //           property.key.type === Identifier && property.key.name === 'rules'
+  //         );
+  //       });
 
-        if (targetNode && targetNode.value.type === ArrayExpression) {
-          console.log(targetNode.value.elements);
-          //   targetNode.value.elements.push();
-          targetNode.value.elements.push();
-        }
-      }
-  }
+  //       if (targetNode && targetNode.value.type === ArrayExpression) {
+  //         // console.log(targetNode.value.elements);
+  //         //   targetNode.value.elements.push();
+  //         const x = t.objectExpression([
+  //           t.objectProperty(
+  //             t.identifier('test'),
+  //             t.regExpLiteral('/.ts$/', ''),
+  //           ),
+  //           t.objectProperty(
+  //             t.identifier('loader'),
+  //             t.stringLiteral('ts-loader'),
+  //           ),
+  //         ]);
+  //       }
+  //     }
+  // }
+
 }
 
 export function processConfig(webpackConfigSourceCode: string) {
@@ -62,31 +76,220 @@ export function processConfig(webpackConfigSourceCode: string) {
   /**
    * STEP1: 解析成ast tree
    */
-  let ast = esprima.parseModule(webpackConfigSourceCode);
+  let ast = babylon.parse(webpackConfigSourceCode, {
+    sourceType: 'module',
+  });
 
   /**
    * STEP2: 遍历ast tree
    * 访问者模式
    */
-  estraverse.traverse(ast, {
-    enter(node, parentNode) {
-      webpackConfigModifier.modifyMode(node, parentNode, 'production');
-      webpackConfigModifier.modifyDevTool(node, parentNode, 'source-map');
-      webpackConfigModifier.modifyModuleRules(node, parentNode);
+  traverse(ast, {
+    enter(node, path) {
+      // webpackConfigModifier.modifyMode(node, parentNode, 'production');
+      // webpackConfigModifier.modifyDevTool(node, parentNode, 'source-map');
+      // webpackConfigModifier.modifyModuleRules(node, parentNode);
     },
-    // leave(node) {}
+    exit() {},
+    ObjectProperty(path) {
+      console.log('*************');
+      console.log(path.node);
+      console.log('*************');
+    }
+
+    /*
+    enter?(path: NodePath<T>, state: any): void;
+    exit?(path: NodePath<T>, state: any): void;
+    */
+
+    /*
+    ArrayExpression?: VisitNode<S, t.ArrayExpression>;
+    AssignmentExpression?: VisitNode<S, t.AssignmentExpression>;
+    LVal?: VisitNode<S, t.LVal>;
+    Expression?: VisitNode<S, t.Expression>;
+    BinaryExpression?: VisitNode<S, t.BinaryExpression>;
+    Directive?: VisitNode<S, t.Directive>;
+    DirectiveLiteral?: VisitNode<S, t.DirectiveLiteral>;
+    BlockStatement?: VisitNode<S, t.BlockStatement>;
+    BreakStatement?: VisitNode<S, t.BreakStatement>;
+    Identifier?: VisitNode<S, t.Identifier>;
+    CallExpression?: VisitNode<S, t.CallExpression>;
+    CatchClause?: VisitNode<S, t.CatchClause>;
+    ConditionalExpression?: VisitNode<S, t.ConditionalExpression>;
+    ContinueStatement?: VisitNode<S, t.ContinueStatement>;
+    DebuggerStatement?: VisitNode<S, t.DebuggerStatement>;
+    DoWhileStatement?: VisitNode<S, t.DoWhileStatement>;
+    Statement?: VisitNode<S, t.Statement>;
+    EmptyStatement?: VisitNode<S, t.EmptyStatement>;
+    ExpressionStatement?: VisitNode<S, t.ExpressionStatement>;
+    File?: VisitNode<S, t.File>;
+    Program?: VisitNode<S, t.Program>;
+    ForInStatement?: VisitNode<S, t.ForInStatement>;
+    VariableDeclaration?: VisitNode<S, t.VariableDeclaration>;
+    ForStatement?: VisitNode<S, t.ForStatement>;
+    FunctionDeclaration?: VisitNode<S, t.FunctionDeclaration>;
+    FunctionExpression?: VisitNode<S, t.FunctionExpression>;
+    IfStatement?: VisitNode<S, t.IfStatement>;
+    LabeledStatement?: VisitNode<S, t.LabeledStatement>;
+    StringLiteral?: VisitNode<S, t.StringLiteral>;
+    NumericLiteral?: VisitNode<S, t.NumericLiteral>;
+    NullLiteral?: VisitNode<S, t.NullLiteral>;
+    BooleanLiteral?: VisitNode<S, t.BooleanLiteral>;
+    RegExpLiteral?: VisitNode<S, t.RegExpLiteral>;
+    LogicalExpression?: VisitNode<S, t.LogicalExpression>;
+    MemberExpression?: VisitNode<S, t.MemberExpression>;
+    NewExpression?: VisitNode<S, t.NewExpression>;
+    ObjectExpression?: VisitNode<S, t.ObjectExpression>;
+    ObjectMethod?: VisitNode<S, t.ObjectMethod>;
+    ObjectProperty?: VisitNode<S, t.ObjectProperty>;
+    RestElement?: VisitNode<S, t.RestElement>;
+    ReturnStatement?: VisitNode<S, t.ReturnStatement>;
+    SequenceExpression?: VisitNode<S, t.SequenceExpression>;
+    SwitchCase?: VisitNode<S, t.SwitchCase>;
+    SwitchStatement?: VisitNode<S, t.SwitchStatement>;
+    ThisExpression?: VisitNode<S, t.ThisExpression>;
+    ThrowStatement?: VisitNode<S, t.ThrowStatement>;
+    TryStatement?: VisitNode<S, t.TryStatement>;
+    UnaryExpression?: VisitNode<S, t.UnaryExpression>;
+    UpdateExpression?: VisitNode<S, t.UpdateExpression>;
+    VariableDeclarator?: VisitNode<S, t.VariableDeclarator>;
+    WhileStatement?: VisitNode<S, t.WhileStatement>;
+    WithStatement?: VisitNode<S, t.WithStatement>;
+    AssignmentPattern?: VisitNode<S, t.AssignmentPattern>;
+    ArrayPattern?: VisitNode<S, t.ArrayPattern>;
+    ArrowFunctionExpression?: VisitNode<S, t.ArrowFunctionExpression>;
+    ClassBody?: VisitNode<S, t.ClassBody>;
+    ClassDeclaration?: VisitNode<S, t.ClassDeclaration>;
+    ClassExpression?: VisitNode<S, t.ClassExpression>;
+    ExportAllDeclaration?: VisitNode<S, t.ExportAllDeclaration>;
+    ExportDefaultDeclaration?: VisitNode<S, t.ExportDefaultDeclaration>;
+    ExportNamedDeclaration?: VisitNode<S, t.ExportNamedDeclaration>;
+    Declaration?: VisitNode<S, t.Declaration>;
+    ExportSpecifier?: VisitNode<S, t.ExportSpecifier>;
+    ForOfStatement?: VisitNode<S, t.ForOfStatement>;
+    ImportDeclaration?: VisitNode<S, t.ImportDeclaration>;
+    ImportDefaultSpecifier?: VisitNode<S, t.ImportDefaultSpecifier>;
+    ImportNamespaceSpecifier?: VisitNode<S, t.ImportNamespaceSpecifier>;
+    ImportSpecifier?: VisitNode<S, t.ImportSpecifier>;
+    MetaProperty?: VisitNode<S, t.MetaProperty>;
+    ClassMethod?: VisitNode<S, t.ClassMethod>;
+    ObjectPattern?: VisitNode<S, t.ObjectPattern>;
+    SpreadElement?: VisitNode<S, t.SpreadElement>;
+    Super?: VisitNode<S, t.Super>;
+    TaggedTemplateExpression?: VisitNode<S, t.TaggedTemplateExpression>;
+    TemplateLiteral?: VisitNode<S, t.TemplateLiteral>;
+    TemplateElement?: VisitNode<S, t.TemplateElement>;
+    YieldExpression?: VisitNode<S, t.YieldExpression>;
+    AnyTypeAnnotation?: VisitNode<S, t.AnyTypeAnnotation>;
+    ArrayTypeAnnotation?: VisitNode<S, t.ArrayTypeAnnotation>;
+    BooleanTypeAnnotation?: VisitNode<S, t.BooleanTypeAnnotation>;
+    BooleanLiteralTypeAnnotation?: VisitNode<S, t.BooleanLiteralTypeAnnotation>;
+    NullLiteralTypeAnnotation?: VisitNode<S, t.NullLiteralTypeAnnotation>;
+    ClassImplements?: VisitNode<S, t.ClassImplements>;
+    ClassProperty?: VisitNode<S, t.ClassProperty>;
+    DeclareClass?: VisitNode<S, t.DeclareClass>;
+    DeclareFunction?: VisitNode<S, t.DeclareFunction>;
+    DeclareInterface?: VisitNode<S, t.DeclareInterface>;
+    DeclareModule?: VisitNode<S, t.DeclareModule>;
+    DeclareTypeAlias?: VisitNode<S, t.DeclareTypeAlias>;
+    DeclareVariable?: VisitNode<S, t.DeclareVariable>;
+    ExistentialTypeParam?: VisitNode<S, t.ExistentialTypeParam>;
+    FunctionTypeAnnotation?: VisitNode<S, t.FunctionTypeAnnotation>;
+    FunctionTypeParam?: VisitNode<S, t.FunctionTypeParam>;
+    GenericTypeAnnotation?: VisitNode<S, t.GenericTypeAnnotation>;
+    InterfaceExtends?: VisitNode<S, t.InterfaceExtends>;
+    InterfaceDeclaration?: VisitNode<S, t.InterfaceDeclaration>;
+    IntersectionTypeAnnotation?: VisitNode<S, t.IntersectionTypeAnnotation>;
+    MixedTypeAnnotation?: VisitNode<S, t.MixedTypeAnnotation>;
+    NullableTypeAnnotation?: VisitNode<S, t.NullableTypeAnnotation>;
+    NumericLiteralTypeAnnotation?: VisitNode<S, t.NumericLiteralTypeAnnotation>;
+    NumberTypeAnnotation?: VisitNode<S, t.NumberTypeAnnotation>;
+    StringLiteralTypeAnnotation?: VisitNode<S, t.StringLiteralTypeAnnotation>;
+    StringTypeAnnotation?: VisitNode<S, t.StringTypeAnnotation>;
+    ThisTypeAnnotation?: VisitNode<S, t.ThisTypeAnnotation>;
+    TupleTypeAnnotation?: VisitNode<S, t.TupleTypeAnnotation>;
+    TypeofTypeAnnotation?: VisitNode<S, t.TypeofTypeAnnotation>;
+    TypeAlias?: VisitNode<S, t.TypeAlias>;
+    TypeAnnotation?: VisitNode<S, t.TypeAnnotation>;
+    TypeCastExpression?: VisitNode<S, t.TypeCastExpression>;
+    TypeParameterDeclaration?: VisitNode<S, t.TypeParameterDeclaration>;
+    TypeParameterInstantiation?: VisitNode<S, t.TypeParameterInstantiation>;
+    ObjectTypeAnnotation?: VisitNode<S, t.ObjectTypeAnnotation>;
+    ObjectTypeCallProperty?: VisitNode<S, t.ObjectTypeCallProperty>;
+    ObjectTypeIndexer?: VisitNode<S, t.ObjectTypeIndexer>;
+    ObjectTypeProperty?: VisitNode<S, t.ObjectTypeProperty>;
+    QualifiedTypeIdentifier?: VisitNode<S, t.QualifiedTypeIdentifier>;
+    UnionTypeAnnotation?: VisitNode<S, t.UnionTypeAnnotation>;
+    VoidTypeAnnotation?: VisitNode<S, t.VoidTypeAnnotation>;
+    JSXAttribute?: VisitNode<S, t.JSXAttribute>;
+    JSXIdentifier?: VisitNode<S, t.JSXIdentifier>;
+    JSXNamespacedName?: VisitNode<S, t.JSXNamespacedName>;
+    JSXElement?: VisitNode<S, t.JSXElement>;
+    JSXExpressionContainer?: VisitNode<S, t.JSXExpressionContainer>;
+    JSXClosingElement?: VisitNode<S, t.JSXClosingElement>;
+    JSXMemberExpression?: VisitNode<S, t.JSXMemberExpression>;
+    JSXOpeningElement?: VisitNode<S, t.JSXOpeningElement>;
+    JSXEmptyExpression?: VisitNode<S, t.JSXEmptyExpression>;
+    JSXSpreadAttribute?: VisitNode<S, t.JSXSpreadAttribute>;
+    JSXText?: VisitNode<S, t.JSXText>;
+    Noop?: VisitNode<S, t.Noop>;
+    ParenthesizedExpression?: VisitNode<S, t.ParenthesizedExpression>;
+    AwaitExpression?: VisitNode<S, t.AwaitExpression>;
+    BindExpression?: VisitNode<S, t.BindExpression>;
+    Decorator?: VisitNode<S, t.Decorator>;
+    DoExpression?: VisitNode<S, t.DoExpression>;
+    ExportDefaultSpecifier?: VisitNode<S, t.ExportDefaultSpecifier>;
+    ExportNamespaceSpecifier?: VisitNode<S, t.ExportNamespaceSpecifier>;
+    RestProperty?: VisitNode<S, t.RestProperty>;
+    SpreadProperty?: VisitNode<S, t.SpreadProperty>;
+    Binary?: VisitNode<S, t.Binary>;
+    Scopable?: VisitNode<S, t.Scopable>;
+    BlockParent?: VisitNode<S, t.BlockParent>;
+    Block?: VisitNode<S, t.Block>;
+    Terminatorless?: VisitNode<S, t.Terminatorless>;
+    CompletionStatement?: VisitNode<S, t.CompletionStatement>;
+    Conditional?: VisitNode<S, t.Conditional>;
+    Loop?: VisitNode<S, t.Loop>;
+    While?: VisitNode<S, t.While>;
+    ExpressionWrapper?: VisitNode<S, t.ExpressionWrapper>;
+    For?: VisitNode<S, t.For>;
+    ForXStatement?: VisitNode<S, t.ForXStatement>;
+    Function?: VisitNode<S, t.Function>;
+    FunctionParent?: VisitNode<S, t.FunctionParent>;
+    Pureish?: VisitNode<S, t.Pureish>;
+    Literal?: VisitNode<S, t.Literal>;
+    Immutable?: VisitNode<S, t.Immutable>;
+    UserWhitespacable?: VisitNode<S, t.UserWhitespacable>;
+    Method?: VisitNode<S, t.Method>;
+    ObjectMember?: VisitNode<S, t.ObjectMember>;
+    Property?: VisitNode<S, t.Property>;
+    UnaryLike?: VisitNode<S, t.UnaryLike>;
+    Pattern?: VisitNode<S, t.Pattern>;
+    Class?: VisitNode<S, t.Class>;
+    ModuleDeclaration?: VisitNode<S, t.ModuleDeclaration>;
+    ExportDeclaration?: VisitNode<S, t.ExportDeclaration>;
+    ModuleSpecifier?: VisitNode<S, t.ModuleSpecifier>;
+    Flow?: VisitNode<S, t.Flow>;
+    FlowBaseAnnotation?: VisitNode<S, t.FlowBaseAnnotation>;
+    FlowDeclaration?: VisitNode<S, t.FlowDeclaration>;
+    JSX?: VisitNode<S, t.JSX>;
+    Scope?: VisitNode<S, t.Scopable>;
+    */
+
+
+
+
+
   });
 
   /**
    * STEP3: 生成新的code
    */
-  const generatedCode = escodegen.generate(ast);
-
-  // console.log('generatedCode', generatedCode);
+  const generatedCode = generate(ast);
 
   fs.writeFileSync(
     path.join(__dirname, '../webpack.config.js'),
-    generatedCode,
+    generatedCode.code,
     {
       encoding: 'utf8',
     },

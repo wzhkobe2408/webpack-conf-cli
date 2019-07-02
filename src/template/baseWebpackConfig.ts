@@ -15,12 +15,7 @@ module.exports = {
     devtool: 'none',
     devServer: {},
     module: {
-        rules: [
-            {
-                test: /\.js?$/,
-                loader: 'babel-loader',
-            }
-        ]
+        rules: []
     },
     resolve: {},
     optimization: {},
